@@ -1,0 +1,59 @@
+Parameters:
+  envVar:
+    Description: Environment variable
+    Type: String
+
+  httpPort:
+    Description: HTTP Port connection
+    Type: String
+
+  allCidr:
+    Description: Cidr block for all IP connections
+    Type: String
+
+  sshPort:
+    Description: Port for SSH connections
+    Type: String
+
+  outPorts:
+    Description: All the ports for outbound traffic
+    Type: CommaDelimitedList
+ 
+Resources:
+  webServerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security for Application Load Balancer
+      GroupName: !Sub ${envVar}-WebServerSG
+      VpcId: vpc-0cd5deaee0cfa2f11
+      SecurityGroupIngress:
+        - Description: Allow HTTP connection
+          IpProtocol: tcp
+          FromPort: !Ref httpPort
+          ToPort: !Ref httpPort
+          CidrIp: !Ref allCidr
+        - Description: Allow SSH connection
+          IpProtocol: tcp
+          FromPort: !Ref sshPort
+          ToPort: !Ref sshPort
+          CidrIp: !Ref allCidr
+      SecurityGroupEgress:
+        - Description: Allow all egress connection
+          IpProtocol: -1
+          FromPort: !Select [0, !Ref outPorts]
+          ToPort: !Select [1, !Ref outPorts]
+          CidrIp: !Ref allCidr
+
+  testVm:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-08d4ac5b634553e16
+      InstanceType: t3.micro
+      KeyName: festineKeys2
+      SecurityGroupIds:
+      - !Ref webServerSG
+      SubnetId: subnet-001f57d2fdeec3f28
+      Tags:
+        - Key: Name
+          Value: TestVm
+

@@ -1,0 +1,22 @@
+[
+    {
+        "ParameterKey": "envVar",
+        "ParameterValue": "circleci"
+    },
+    {
+        "ParameterKey": "httpPort",
+        "ParameterValue": "80"
+    },
+    {
+        "ParameterKey": "allCidr",
+        "ParameterValue": "0.0.0.0/0"
+    },
+    {
+        "ParameterKey": "sshPort",
+        "ParameterValue": "22"
+    },
+    {
+        "ParameterKey": "outPorts",
+        "ParameterValue": "0, 65535"
+    }
+]

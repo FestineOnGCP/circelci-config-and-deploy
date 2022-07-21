@@ -1,0 +1,9 @@
+---
+  - name: Configure nodejs
+    hosts: all
+    user: ubuntu
+    become: yes
+    become_method: sudo
+    become_user: root
+    roles:
+      - setup
