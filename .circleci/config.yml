@@ -45,7 +45,7 @@ jobs:
           command: |
             apk add --update ansible
       - attach_workspace:
-          at: ./inventory.txt
+          at: ./
       - run:
           name: Run Playbook and Configure server
           command: |
