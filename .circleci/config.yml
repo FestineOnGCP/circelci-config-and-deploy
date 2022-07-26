@@ -32,7 +32,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           # You can get this ID in the section where you registered the SSH Key
-          fingerprints: ["1a:a3:b6:5a:59:b2:8f:41:f4:d2:82:55:0b:9c:90:66"] 
+          fingerprints: ["64:83:f7:e0:d4:39:2c:8d:93:ac:f9:ee:10:d3:1d:e0"] 
       - run:
           name: Install Ansible
           command: |
@@ -45,4 +45,11 @@ jobs:
 workflows:
   default:
     jobs:
-      - configure_infrastructure
+      - create_instance
+      - get_instance_ip:
+          requires:
+            - create_instance
+      - configure_infrastructure:
+          requires:
+            - create_instance
+            - get_instance_ip
