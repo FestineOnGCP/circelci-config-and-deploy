@@ -1,15 +1,17 @@
 version: 2.1
 
 executors:
-  my-exec-env:
+  ansible-exec-env:
     docker:
         - image: python:3.7-alpine3.11
-        - image: amazon/aws-cli
+  aws-exec-env:
+    docker:
+      - image: amazon/aws-cli
 
 jobs:
   # Create EC2 instance
   create_instance:
-    executor: my-exec-env
+    executor: aws-exec-env
     steps:
       - checkout
       - run:
@@ -20,14 +22,14 @@ jobs:
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
   # Get IP address of the instance
   get_instance_ip:
-    executor: my-exec-env
+    executor: aws-exec-env
     steps:
       - checkout
       - run: chmod +x inv-script.sh
       - run: ./inv-script.sh
   # Exercise: Config and Deployment
   configure_infrastructure:
-    executor: my-exec-env
+    executor: ansible-exec-env
     steps:
       - checkout
       - add_ssh_keys:
