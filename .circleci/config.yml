@@ -27,6 +27,9 @@ jobs:
       - checkout
       - run: chmod +x inv-script.sh
       - run: ./inv-script.sh
+      - persist_to_workspace:
+          root: ./
+          paths: inventory.txt
   # Exercise: Config and Deployment
   configure_infrastructure:
     executor: ansible-exec-env
@@ -39,6 +42,8 @@ jobs:
           name: Install Ansible
           command: |
             apk add --update ansible
+      - attach_workspace:
+          at: ./inventory.txt
       - run:
           name: Run Playbook and Configure server
           command: |

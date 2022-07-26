@@ -25,7 +25,7 @@ Resources:
     Properties:
       GroupDescription: Security for Application Load Balancer
       GroupName: !Sub ${envVar}-WebServerSG
-      VpcId: vpc-0cd5deaee0cfa2f11
+      VpcId: vpc-07695e125399efc5d
       SecurityGroupIngress:
         - Description: Allow HTTP connection
           IpProtocol: tcp
@@ -47,12 +47,12 @@ Resources:
   testVm:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-08d4ac5b634553e16
+      ImageId: ami-012ae45a4a2d92750
       InstanceType: t3.micro
       KeyName: festineKeys2
       SecurityGroupIds:
       - !Ref webServerSG
-      SubnetId: subnet-001f57d2fdeec3f28
+      SubnetId: subnet-00ace097bb71065b9
       Tags:
         - Key: Name
           Value: TestVm
