@@ -9,18 +9,6 @@ executors:
       - image: amazon/aws-cli
 
 jobs:
-  # Create EC2 instance
-  create_instance:
-    executor: aws-exec-env
-    steps:
-      - checkout
-      - run:
-          name: create a cloudformaiton stack
-          command: |
-            aws cloudformation create-stack --stack-name circleci-stack \
-            --template-body file://infra.yml --parameters file://infra-params.json \
-            --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
-  # Get IP address of the instance
   get_instance_ip:
     executor: aws-exec-env
     steps:
@@ -54,11 +42,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - create_instance
-      - get_instance_ip:
-          requires:
-            - create_instance
+      - get_instance_ip
       - configure_infrastructure:
           requires:
-            - create_instance
             - get_instance_ip
