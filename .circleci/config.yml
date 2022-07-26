@@ -1,5 +1,13 @@
 version: 2.1
 
+commands:
+  destroy-env:
+    steps:
+      - run: 
+          name: Destroy the circleci-stack we created if the smoke test fails
+          command: aws cloudformation delete-stack --stack-name circleci-stack
+          when: on_fail
+
 executors:
   ansible-exec-env:
     docker:
@@ -17,9 +25,10 @@ jobs:
       - run: ./inv-script.sh
       - run: yum install tar -y
       - run: yum install gzip -y
-      - persist_to_workspace:
-          root: ./
-          paths: inventory.txt
+      - save_cache:
+          key: inv-file
+          paths: 
+            - inventory.txt
   # Exercise: Config and Deployment
   configure_infrastructure:
     executor: ansible-exec-env
@@ -32,12 +41,19 @@ jobs:
           name: Install Ansible
           command: |
             apk add --update ansible
-      - attach_workspace:
-          at: ./
+      - restore_cache:
+          keys:
+            - inv-file
       - run:
           name: Run Playbook and Configure server
           command: |
             ansible-playbook -i inventory.txt main-remote.yml
+  # Simulate a failed smoke test
+  smoke_test:
+    executor: aws-exec-env
+    steps:
+      - run: return 1
+      - destroy-env
 
 workflows:
   default:
@@ -46,3 +62,6 @@ workflows:
       - configure_infrastructure:
           requires:
             - get_instance_ip
+      - smoke_test:
+          requires:
+            - configure_infrastructure
