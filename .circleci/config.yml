@@ -15,7 +15,7 @@ jobs:
       - run:
           name: create a cloudformaiton stack
           command: |
-            aws cloudformation create-stack --name circleci-stack \
+            aws cloudformation create-stack --stack-name circleci-stack \
             --template-body file://infra.yml --parameters file://infra-params.yml \
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
   # Get IP address of the instance
