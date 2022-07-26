@@ -6,7 +6,6 @@ commands:
       - run: 
           name: Destroy the circleci-stack we created if the smoke test fails
           command: aws cloudformation delete-stack --stack-name circleci-stack
-          when: on_fail
 
 executors:
   ansible-exec-env:
@@ -53,7 +52,9 @@ jobs:
     executor: aws-exec-env
     steps:
       - run: return 1
-      - destroy-env
+      - destroy-env:
+          when: on_fail
+
 
 workflows:
   default:
