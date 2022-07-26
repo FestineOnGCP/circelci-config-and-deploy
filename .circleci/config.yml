@@ -28,6 +28,7 @@ jobs:
       - run: chmod +x inv-script.sh
       - run: ./inv-script.sh
       - run: yum install tar -y
+      - run: yum install gzip -y
       - persist_to_workspace:
           root: ./
           paths: inventory.txt
