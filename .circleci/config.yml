@@ -27,7 +27,7 @@ jobs:
       - checkout
       - run: chmod +x inv-script.sh
       - run: ./inv-script.sh
-      - run: apt install tar -y
+      - run: yum install tar -y
       - persist_to_workspace:
           root: ./
           paths: inventory.txt
